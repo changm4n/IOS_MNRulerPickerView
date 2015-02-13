@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  MNRulerPickerViewCell.h
 //  MNRulerPickerView
 //
 //  Created by 이창민 on 2015. 2. 13..
@@ -8,9 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface MNRulerPickerViewCell : UITableViewCell
+@property (strong, nonatomic) IBOutlet UILabel *myLabel;
 
-
-@property (strong,nonatomic)  UILabel *lb;
 @end
-

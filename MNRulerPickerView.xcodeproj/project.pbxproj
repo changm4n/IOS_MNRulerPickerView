@@ -18,6 +18,8 @@
 		3789B31B1A8D0BA700CE59CF /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3789B3161A8D0BA700CE59CF /* Default@2x.png */; };
 		3789B31C1A8D0BA700CE59CF /* MNRulerPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3789B3181A8D0BA700CE59CF /* MNRulerPickerView.m */; };
 		3789B31F1A8D109600CE59CF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3789B31D1A8D109600CE59CF /* Main.storyboard */; };
+		378BDE4E1A8DFBAE00ED040B /* MNRulerPickerViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 378BDE4C1A8DFBAE00ED040B /* MNRulerPickerViewCell.m */; };
+		378BDE4F1A8DFBAE00ED040B /* MNRulerPickerViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 378BDE4D1A8DFBAE00ED040B /* MNRulerPickerViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,9 @@
 		3789B3171A8D0BA700CE59CF /* MNRulerPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNRulerPickerView.h; sourceTree = "<group>"; };
 		3789B3181A8D0BA700CE59CF /* MNRulerPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNRulerPickerView.m; sourceTree = "<group>"; };
 		3789B31E1A8D109600CE59CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		378BDE4B1A8DFBAE00ED040B /* MNRulerPickerViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNRulerPickerViewCell.h; sourceTree = "<group>"; };
+		378BDE4C1A8DFBAE00ED040B /* MNRulerPickerViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MNRulerPickerViewCell.m; sourceTree = "<group>"; };
+		378BDE4D1A8DFBAE00ED040B /* MNRulerPickerViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MNRulerPickerViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,8 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				3789B31D1A8D109600CE59CF /* Main.storyboard */,
-				3789B3171A8D0BA700CE59CF /* MNRulerPickerView.h */,
-				3789B3181A8D0BA700CE59CF /* MNRulerPickerView.m */,
+				378BDE511A8E07EF00ED040B /* MNRulerPicker */,
 				3789B2F21A8D0B4300CE59CF /* AppDelegate.h */,
 				3789B2F31A8D0B4300CE59CF /* AppDelegate.m */,
 				3789B2F51A8D0B4300CE59CF /* ViewController.h */,
@@ -131,6 +135,26 @@
 				3789B3091A8D0B4300CE59CF /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		378BDE501A8E07DD00ED040B /* MNRulerPickerCell */ = {
+			isa = PBXGroup;
+			children = (
+				378BDE4B1A8DFBAE00ED040B /* MNRulerPickerViewCell.h */,
+				378BDE4C1A8DFBAE00ED040B /* MNRulerPickerViewCell.m */,
+				378BDE4D1A8DFBAE00ED040B /* MNRulerPickerViewCell.xib */,
+			);
+			name = MNRulerPickerCell;
+			sourceTree = "<group>";
+		};
+		378BDE511A8E07EF00ED040B /* MNRulerPicker */ = {
+			isa = PBXGroup;
+			children = (
+				3789B3171A8D0BA700CE59CF /* MNRulerPickerView.h */,
+				3789B3181A8D0BA700CE59CF /* MNRulerPickerView.m */,
+				378BDE501A8E07DD00ED040B /* MNRulerPickerCell */,
+			);
+			name = MNRulerPicker;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,6 +243,7 @@
 				3789B31F1A8D109600CE59CF /* Main.storyboard in Resources */,
 				3789B2FC1A8D0B4300CE59CF /* Images.xcassets in Resources */,
 				3789B31A1A8D0BA700CE59CF /* Default.png in Resources */,
+				378BDE4F1A8DFBAE00ED040B /* MNRulerPickerViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +263,7 @@
 			files = (
 				3789B2F71A8D0B4300CE59CF /* ViewController.m in Sources */,
 				3789B2F41A8D0B4300CE59CF /* AppDelegate.m in Sources */,
+				378BDE4E1A8DFBAE00ED040B /* MNRulerPickerViewCell.m in Sources */,
 				3789B31C1A8D0BA700CE59CF /* MNRulerPickerView.m in Sources */,
 				3789B2F11A8D0B4300CE59CF /* main.m in Sources */,
 			);
@@ -432,6 +458,7 @@
 				3789B3101A8D0B4300CE59CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3789B3111A8D0B4300CE59CF /* Build configuration list for PBXNativeTarget "MNRulerPickerViewTests" */ = {
 			isa = XCConfigurationList;
@@ -440,6 +467,7 @@
 				3789B3131A8D0B4300CE59CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

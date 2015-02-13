@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "MNRulerPickerView.h"
 #define DEGREES_TO_RADIANS(x) (M_PI * (x) / 180.0)
-@interface ViewController () <MNRulerPickerViewDelegate, MNRulerPickerViewDataSource>
+@interface ViewController () <MNRulerPickerViewDelegate>
 
 @end
 @implementation ViewController
@@ -17,24 +17,18 @@
 - (void)viewDidLoad
 {
   [super viewDidLoad];
-  self.view.backgroundColor = [UIColor blueColor];
-  
-  _pickerData = [[NSArray alloc]initWithObjects:@"Hello", @"This", @"Is", @"The", @"Custom", @"MNRulerPickerView", @"It", @"Works", @"And", @"Looks", @"Great", nil];
-  
-  // Do any additional setup after loading the view, typically from a nib.
-  MNRulerPickerView *MNRuler = [[MNRulerPickerView alloc]initWithFrame:CGRectMake(10,200,300,100)];
-  [MNRuler min:10 max:30];
+  self.view.backgroundColor = [UIColor whiteColor];
+  _lb = [[UILabel alloc]initWithFrame:CGRectMake(110, 70, 100, 100)];
+  MNRulerPickerView *MNRuler = [[MNRulerPickerView alloc]initWithFrame:CGRectMake(50, 200, 200, 80)];
+  [MNRuler min:70 max:100];
   CGAffineTransform rotate = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(270));
   rotate = CGAffineTransformScale(rotate,1,1);
   [MNRuler setTransform:rotate];
-  
+  [MNRuler setBackgroundColor:[UIColor blueColor]];
   MNRuler.delegate = self;
-  MNRuler.dataSource = self;
-  // MNRulerPickerView.backgroundColor = [UIColor colorWithRed:0.6980392157 green:0.6980392157 blue:0.6980392157 alpha:1.0];
   
   [self.view addSubview:MNRuler];
-  
-  [MNRuler selectRow:5];
+  [self.view addSubview:_lb];
 }
 
 - (void)didReceiveMemoryWarning
@@ -48,26 +42,14 @@
 - (NSInteger)MNRulerPickerView:(MNRulerPickerView *)MNRulerPickerView titleForRow:(NSInteger)row {
   return row;
 }
-- (void)MNRulerPickerView:(MNRulerPickerView*)MNRulerPickerView didSelectRow:(NSInteger)row {
-  NSLog(@"Row is %ld", (long)row);
+- (void)MNRulerPickerView:(MNRulerPickerView*)MNRulerPickerView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+  _lb.text = [NSString stringWithFormat:@"%0.1f cm",(float)indexPath.row/10];
 }
-
 - (CGFloat)rowHeightForMNRulerPickerView:(MNRulerPickerView *)MNRulerPickerView{
-  return 10;
+  return 100;
 }
 
 
-- (void)labelStyleForMNRulerPickerView:(MNRulerPickerView*)MNRulerPickerView forLabel:(UILabel*)label {
-  label.textColor = [UIColor blackColor];
-  label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:25.0];
-  label.backgroundColor = [UIColor grayColor];
-}
 
-#pragma mark - MNRulerPickerViewDataSource functions
-
-
-- (NSInteger)numberOfRowsInMNRulerPickerView:(MNRulerPickerView*)MNRulerPickerView {
-  return [_pickerData count];
-}
 
 @end

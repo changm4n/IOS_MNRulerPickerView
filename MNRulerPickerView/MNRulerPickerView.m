@@ -7,6 +7,7 @@
 //
 
 #import "MNRulerPickerView.h"
+#import "MNRulerPickerViewCell.h"
 #define DEGREES_TO_RADIANS(x) (M_PI * (x) / 180.0)
 
 @interface MNRulerPickerView() <UITableViewDataSource, UITableViewDelegate>
@@ -17,7 +18,7 @@
   UITableView *_tableView;
 }
 
-- (id)initWithFrame:(CGRect)frame {
+- (id)initWithFrame:(CGRect)frame{
   CGFloat x = frame.origin.x;
   CGFloat y = frame.origin.y;
   CGFloat w = frame.size.width;
@@ -28,15 +29,18 @@
 
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    //_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.allowsSelection = NO;
     _tableView.showsVerticalScrollIndicator = NO;
     _tableView.showsHorizontalScrollIndicator = NO;
+    _tableView.bounces=NO;
+    UIView *v =[[UIView alloc]init];
+    [_tableView setTableFooterView:v];
     
+
     self.overlayCell = [[UIView alloc] init];
     self.overlayCell.backgroundColor = [UIColor redColor];
     self.overlayCell.userInteractionEnabled = NO;
-    self.overlayCell.alpha = 0.5;
     
   }
   return self;
@@ -44,16 +48,11 @@
 
 - (void)layoutSubviews {
   CGFloat rowHeight = [self.delegate rowHeightForMNRulerPickerView:self];
-  
+  _tableView.contentInset = UIEdgeInsetsMake(rowHeight, 0,rowHeight, 0);
   // Move overlay to center of table view
-  CGFloat centerY = (self.frame.size.width - rowHeight) / 2.0;
-  self.overlayCell.frame = CGRectMake(0.0, centerY, self.frame.size.height, rowHeight);
+  CGFloat centerY = (self.frame.size.width)/2.0;
+  self.overlayCell.frame = CGRectMake(self.frame.size.height/2, centerY-1, self.frame.size.height/2, 3);
   
-  // Calculate height of table based on height of cell and height of frame
-  // Figure out the number of cells that will fit on the table
-  //NSInteger numCells = (NSInteger)(floor(self.frame.size.height / [self.delegate rowHeightForMNRulerPickerView:self]));
-
-
   
   [self addSubview:_tableView];
   [self addSubview:_overlayCell];
@@ -71,10 +70,7 @@
 }
 
 
-- (void)selectRow:(NSInteger)row {
-    CGFloat rowHeight = [self.delegate rowHeightForMNRulerPickerView:self];
-	[_tableView setContentOffset:CGPointMake(0.0, row * rowHeight)];
-}
+
 
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor {
@@ -90,63 +86,23 @@
 }
 
 
-
-
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	CGFloat rowHeight = [self.delegate rowHeightForMNRulerPickerView:self];
-    
-	static NSString *CellIdentifier = @"Cell";
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-		
-	if (cell == nil) {
-		// Alloc a new cell
-		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    
-		UILabel *textLabel;
-    if (indexPath.row == 0) {//set label frame
-      textLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, self.overlayCell.frame.origin.y-10, 30, 30)];
-      textLabel.text = [NSString stringWithFormat:@"%ld",[self.delegate MNRulerPickerView:self titleForRow:indexPath.row]+_minValue];
-
-    }
-    else if((indexPath.row+_minValue)%10 ==9){/// 10 20 30 ...
-      textLabel = [[UILabel alloc] initWithFrame:CGRectMake(5,0, 30, 30)];
-          textLabel.text = [NSString stringWithFormat:@"%ld",[self.delegate MNRulerPickerView:self titleForRow:indexPath.row]+_minValue+1];
-    }
-
-    
-    
-		textLabel.tag = -1;
-    textLabel.backgroundColor = [UIColor clearColor];
-    [self.delegate labelStyleForMNRulerPickerView:self forLabel:textLabel];///////////////
-
-    CGAffineTransform rotate = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(90));
-    rotate = CGAffineTransformScale(rotate,1,1);
-    [textLabel setTransform:rotate];
-		[cell.contentView addSubview:textLabel];
-		
-	}
-  else {
-		// Reuse cell
-
-		UILabel *textLabel = (UILabel*)[cell.contentView viewWithTag:-1];
-    
-    if (indexPath.row == 0) {//set label frame
-      textLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, self.overlayCell.frame.origin.y-10, 30, 30)];
-      textLabel.text = [NSString stringWithFormat:@"%ld",[self.delegate MNRulerPickerView:self titleForRow:indexPath.row]+_minValue];
-      
-    }
-    else if((indexPath.row+_minValue)%10 ==9){/// 10 20 30 ...
-      textLabel = [[UILabel alloc] initWithFrame:CGRectMake(5,0, 30, 30)];
-      textLabel.text = [NSString stringWithFormat:@"%ld",[self.delegate MNRulerPickerView:self titleForRow:indexPath.row]+_minValue+1];
-    }
   
-    CGAffineTransform rotate = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(90));
-    rotate = CGAffineTransformScale(rotate,1,1);
-    [textLabel setTransform:rotate];
-	}
-		
-	return cell;
+  MNRulerPickerViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+  
+  
+  if(cell ==nil){
+    [tableView registerNib:[UINib nibWithNibName:@"MNRulerPickerViewCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
+    cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+  
+  }
+  CGAffineTransform rotate = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(90));
+  rotate = CGAffineTransformScale(rotate,1,1);
+  [cell.myLabel setTransform:rotate];
+  cell.myLabel.text =[NSString stringWithFormat:@"%d",(int)([self.delegate MNRulerPickerView:self titleForRow:indexPath.row]+_minValue)];
+  
+  
+  return cell;
 }
 
 
@@ -154,33 +110,31 @@
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat rowHeight = [self.delegate rowHeightForMNRulerPickerView:self];
-    
-	// Add front and back padding to make this more closely resemble a picker view
-	if (indexPath.row == 0) {
-		return (self.overlayCell.frame.origin.y + rowHeight);
-	}
-  else if (indexPath.row == [self.dataSource numberOfRowsInMNRulerPickerView:self] - 1) {
-		return (self.overlayCell.frame.origin.y + rowHeight);
-	}
-	return rowHeight;
+    return [self.delegate rowHeightForMNRulerPickerView:self];
 }
 
 
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+  CGFloat rowHeight = [self.delegate rowHeightForMNRulerPickerView:self];
+  NSInteger currentRow =(int)(_tableView.contentOffset.y+(self.frame.size.width-rowHeight)/2)/10;
+  [self.delegate MNRulerPickerView:self didSelectRowAtIndexPath:[NSIndexPath indexPathForRow: currentRow+_minValue*10 inSection:0]];
+}
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
-    CGFloat rowHeight = [self.delegate rowHeightForMNRulerPickerView:self];
-    
+  CGFloat rowHeight = 10;
+  
 	// Auto scroll to next multiple of rowHeight
 	CGFloat floatVal = targetContentOffset->y / rowHeight;
-	NSInteger rounded = (NSInteger)(lround(floatVal));
+	NSInteger rounded = (NSInteger)(ceilf(floatVal));
 
 	targetContentOffset->y = rounded * rowHeight;
-    
-    // Tell delegate where we're landing
-    [self.delegate MNRulerPickerView:self didSelectRow:rounded];
 }
 
+- (void)selectRow:(NSInteger)row {
+  CGFloat rowHeight = [self.delegate rowHeightForMNRulerPickerView:self];
+  [_tableView setContentOffset:CGPointMake(0.0, row * rowHeight)];
+}
 
 
 
