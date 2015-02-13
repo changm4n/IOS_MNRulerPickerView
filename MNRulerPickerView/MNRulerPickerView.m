@@ -24,7 +24,6 @@
   CGFloat h = frame.size.height;
   self = [super initWithFrame:CGRectMake(x+(w-h)/2, y+(h-w)/2, h, w)];
   if (self) {
-    // Initialization code
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.frame.size.width, self.frame.size.height) style:UITableViewStylePlain];
 
     _tableView.delegate = self;
@@ -57,7 +56,7 @@
 
   
   [self addSubview:_tableView];
- [self addSubview:_overlayCell];
+  [self addSubview:_overlayCell];
 }
 
 /*
@@ -66,11 +65,17 @@
 	return _tableView;
 }*/
 
+- (void)min:(NSInteger)min max:(NSInteger)max{
+  _minValue = min;
+  _maxValue = max;
+}
+
+
 - (void)selectRow:(NSInteger)row {
     CGFloat rowHeight = [self.delegate rowHeightForMNRulerPickerView:self];
-    
 	[_tableView setContentOffset:CGPointMake(0.0, row * rowHeight)];
 }
+
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor {
     _tableView.backgroundColor = backgroundColor;
@@ -79,8 +84,14 @@
 #pragma mark - UITableViewDelegate functions
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return [self.dataSource numberOfRowsInMNRulerPickerView:self];
+
+  //return [self.dataSource numberOfRowsInMNRulerPickerView:self];
+  return _maxValue-_minValue+1;
 }
+
+
+
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat rowHeight = [self.delegate rowHeightForMNRulerPickerView:self];
@@ -91,39 +102,56 @@
 	if (cell == nil) {
 		// Alloc a new cell
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-			
-		UIView *contentView = cell.contentView;
-				
+    
 		UILabel *textLabel;
-		if (indexPath.row == 0) {
-			textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, self.overlayCell.frame.origin.y, self.frame.size.width, rowHeight)];
-		} else {
-			textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, self.frame.size.width, rowHeight)];
-		}
-		textLabel.tag = -1;
-		textLabel.text = [self.delegate djuPickerView:self titleForRow:indexPath.row];
-      textLabel.backgroundColor = [UIColor clearColor];
-      [self.delegate labelStyleForMNRulerPickerView:self forLabel:textLabel];
+    if (indexPath.row == 0) {//set label frame
+      textLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, self.overlayCell.frame.origin.y-10, 30, 30)];
+      textLabel.text = [NSString stringWithFormat:@"%ld",[self.delegate MNRulerPickerView:self titleForRow:indexPath.row]+_minValue];
 
-		[contentView addSubview:textLabel];
+    }
+    else if((indexPath.row+_minValue)%10 ==9){/// 10 20 30 ...
+      textLabel = [[UILabel alloc] initWithFrame:CGRectMake(5,0, 30, 30)];
+          textLabel.text = [NSString stringWithFormat:@"%ld",[self.delegate MNRulerPickerView:self titleForRow:indexPath.row]+_minValue+1];
+    }
+
+    
+    
+		textLabel.tag = -1;
+    textLabel.backgroundColor = [UIColor clearColor];
+    [self.delegate labelStyleForMNRulerPickerView:self forLabel:textLabel];///////////////
+
+    CGAffineTransform rotate = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(90));
+    rotate = CGAffineTransformScale(rotate,1,1);
+    [textLabel setTransform:rotate];
+		[cell.contentView addSubview:textLabel];
 		
 	}
   else {
 		// Reuse cell
-		UIView *contentView = cell.contentView;
-				
-		UILabel *textLabel = (UILabel*)[contentView viewWithTag:-1];
-		textLabel.text = [self.delegate djuPickerView:self titleForRow:indexPath.row];
-		
-		if (indexPath.row == 0) {
-			textLabel.frame = CGRectMake(0.0, self.overlayCell.frame.origin.y, self.frame.size.width, rowHeight);
-		} else {
-			textLabel.frame = CGRectMake(0.0, 0.0, self.frame.size.width, rowHeight);
-		}
+
+		UILabel *textLabel = (UILabel*)[cell.contentView viewWithTag:-1];
+    
+    if (indexPath.row == 0) {//set label frame
+      textLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, self.overlayCell.frame.origin.y-10, 30, 30)];
+      textLabel.text = [NSString stringWithFormat:@"%ld",[self.delegate MNRulerPickerView:self titleForRow:indexPath.row]+_minValue];
+      
+    }
+    else if((indexPath.row+_minValue)%10 ==9){/// 10 20 30 ...
+      textLabel = [[UILabel alloc] initWithFrame:CGRectMake(5,0, 30, 30)];
+      textLabel.text = [NSString stringWithFormat:@"%ld",[self.delegate MNRulerPickerView:self titleForRow:indexPath.row]+_minValue+1];
+    }
+  
+    CGAffineTransform rotate = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(90));
+    rotate = CGAffineTransformScale(rotate,1,1);
+    [textLabel setTransform:rotate];
 	}
 		
 	return cell;
 }
+
+
+
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat rowHeight = [self.delegate rowHeightForMNRulerPickerView:self];
@@ -138,6 +166,8 @@
 	return rowHeight;
 }
 
+
+
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
     CGFloat rowHeight = [self.delegate rowHeightForMNRulerPickerView:self];
     
@@ -148,7 +178,10 @@
 	targetContentOffset->y = rounded * rowHeight;
     
     // Tell delegate where we're landing
-    [self.delegate djuPickerView:self didSelectRow:rounded];
+    [self.delegate MNRulerPickerView:self didSelectRow:rounded];
 }
+
+
+
 
 @end

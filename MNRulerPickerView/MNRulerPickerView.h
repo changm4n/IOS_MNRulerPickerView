@@ -14,6 +14,7 @@
 @interface MNRulerPickerView : UIView
 
 - (void)selectRow:(NSInteger)row;
+- (void)min:(NSInteger)min max:(NSInteger)min;
 
 @property (nonatomic, strong) UIView *overlayCell;
 @property (nonatomic, strong) UIColor *backgroundColor;
@@ -27,15 +28,15 @@
 
 @protocol MNRulerPickerViewDelegate
 
-- (NSString *)djuPickerView:(MNRulerPickerView*)djuPickerView titleForRow:(NSInteger)row;
-- (void)djuPickerView:(MNRulerPickerView*)djuPickerView didSelectRow:(NSInteger)row;
-- (CGFloat)rowHeightForMNRulerPickerView:(MNRulerPickerView*)djuPickerView;
-- (void)labelStyleForMNRulerPickerView:(MNRulerPickerView*)djuPickerView forLabel:(UILabel*)label;
+- (NSInteger)MNRulerPickerView:(MNRulerPickerView*)MNRulerPickerView titleForRow:(NSInteger)row;
+- (void)MNRulerPickerView:(MNRulerPickerView*)MNRulerPickerView didSelectRow:(NSInteger)row;
+- (CGFloat)rowHeightForMNRulerPickerView:(MNRulerPickerView*)MNRulerPickerView;
+- (void)labelStyleForMNRulerPickerView:(MNRulerPickerView*)MNRulerPickerView forLabel:(UILabel*)label;
 
 @end
 
 @protocol MNRulerPickerViewDataSource
 
-- (NSInteger)numberOfRowsInMNRulerPickerView:(MNRulerPickerView*)djuPickerView;
+- (NSInteger)numberOfRowsInMNRulerPickerView:(MNRulerPickerView*)MNRulerPickerView;
 
 @end
