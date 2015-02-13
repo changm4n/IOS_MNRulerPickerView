@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @protocol MNRulerPickerViewDelegate;
-@protocol MNRulerPickerViewDataSource;
 
 @interface MNRulerPickerView : UIView
 
@@ -22,21 +21,12 @@
 @property (nonatomic) NSInteger minValue;
 
 @property (nonatomic, weak) id <MNRulerPickerViewDelegate> delegate;
-@property (nonatomic, weak) id <MNRulerPickerViewDataSource> dataSource;
 
 @end
 
 @protocol MNRulerPickerViewDelegate
-
 - (NSInteger)MNRulerPickerView:(MNRulerPickerView*)MNRulerPickerView titleForRow:(NSInteger)row;
-- (void)MNRulerPickerView:(MNRulerPickerView*)MNRulerPickerView didSelectRow:(NSInteger)row;
+- (void)MNRulerPickerView:(MNRulerPickerView*)MNRulerPickerView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 - (CGFloat)rowHeightForMNRulerPickerView:(MNRulerPickerView*)MNRulerPickerView;
-- (void)labelStyleForMNRulerPickerView:(MNRulerPickerView*)MNRulerPickerView forLabel:(UILabel*)label;
-
-@end
-
-@protocol MNRulerPickerViewDataSource
-
-- (NSInteger)numberOfRowsInMNRulerPickerView:(MNRulerPickerView*)MNRulerPickerView;
 
 @end
